@@ -1,7 +1,7 @@
 {
   "name": "TwitchColorChanger",
   "version": "0.0.1",
-  "description": "Change color of your name on twitch using random delay",
+  "description": "Change color of your name on twitch using delay",
   "keywords": [
     "websocket",
     "colors",
