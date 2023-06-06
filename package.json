@@ -1,0 +1,44 @@
+{
+  "name": "TwitchColorChanger",
+  "version": "0.0.1",
+  "description": "Change color of your name on twitch using random delay",
+  "keywords": [
+    "websocket",
+    "colors",
+    "twitch",
+    "ws"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "author": {
+    "name": "fxhxyz4",
+    "email": "fxhxyz@proton.me",
+    "url": "https://fxhxyz.vercel.app/"
+  },
+  "homepage": "https://github.com/fxhxyz4/TwitchColorChanger/",
+  "bugs": "https://github.com/fxhxyz4/TwitchColorChanger/issues",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fxhxyz4/TwitchColorChanger.git"
+  },
+  "maintainers": [
+    {
+      "name": "fxhxyz4",
+      "email": "fxhxyz@proton.me"
+    }
+  ],
+  "scripts": {
+    "dep": "node .",
+    "dev": "nodemon ."
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
