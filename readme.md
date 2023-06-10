@@ -1,5 +1,9 @@
 ## TwitchColorChanger
 
+### ⚠️[not working](https://discuss.dev.twitch.tv/t/deprecation-of-chat-commands-through-irc/40486)
+
+#
+
 ### Change color of your name on twitch using delay.
 
 #
