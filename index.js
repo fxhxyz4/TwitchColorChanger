@@ -47,10 +47,10 @@ const defaultColors = [
 const prime = false; // if you have Twitch Prime or Turbo, set to true
 
 const getColor = () => {
-	if (prime) {
-		return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
-	} else if (customColors && customColors.length > 0) {
+	if (customColors && customColors.length > 0) {
 		return customColors[Math.floor(Math.random() * customColors.length)];
+	} else if (prime) {
+		return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
 	} else {
 		return defaultColors[Math.floor(Math.random() * defaultColors.length)];
 	}
