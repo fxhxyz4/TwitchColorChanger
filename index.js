@@ -23,7 +23,7 @@ import WebSocket from "ws";
 const ws = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
 
 const user = "bxffz_"; // your twitch username
-const oauth = "oauth:"; // your twitch OAuth token https://twitch-token.onrender.com/ or https://twitchapps.com/tmi/
+const oauth = "oauth:"; // your twitch OAuth token https://twitchapps.com/tmi/
 
 const delay = 8000; // Delay for changing color in chat (recommend min delay: 5s/5000ms)
 const customColors = []; // your custom colors
