@@ -6,7 +6,7 @@
 
 ### installation:
 
-- download [nodejs](https://nodejs.org/en).
+- download [nodejs](https://nodejs.org/en) lts version.
 - download repo.
 - change settings in index.js file.
 
