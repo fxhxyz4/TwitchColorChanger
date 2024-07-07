@@ -1,0 +1,37 @@
+services:
+- type: web
+  repo: https://github.com/fxhxyz4/TwitchColorChanger.git
+  name: color
+  runtime: node
+  plan: free
+  buildCommand: yarn
+  startCommand: yarn dep
+  region: frankfurt
+  branch: main
+  envVars:
+  - key: PORT
+    value: 6565
+  - key: USER
+    value: fxhxyz
+  - key: ID
+    value: 603173186
+  - key: CHANNEL
+    value: fxhxyz
+  - key: CLIENT_ID
+    value: client_id
+  - key: CLIENT_SECRET
+    value: client_secret
+  - key: OAUTH
+    value: oauth token
+  - key: PRIME
+    value: "false"
+  - key: DELAY
+    value: 3000
+  - key: BASE_URI
+    value: http://localhost:6565
+  - key: REDIRECT_URI
+    value: http://localhost:6565/auth/twitch/callback
+  - key: AUTH_URI
+    value: https://id.twitch.tv/oauth2
+  - key: POST
+    value: https://api.twitch.tv/helix/chat/color
