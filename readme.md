@@ -8,13 +8,19 @@
 
 ___ㅤ1. download [nodejs](https://nodejs.org/en/download/package-manager) LTS version.___
 
-___ㅤ2. fork and download this repo.___
+___ㅤ2. [fork](https://github.com/fxhxyz4/TwitchColorChanger/fork) or [download](https://github.com/fxhxyz4/TwitchColorChanger/archive/refs/heads/main.zip) this repo.___
 
-___ㅤ3. change [variables](#twitch) in «.env.example» file.___
+___ㅤ3. change [variables](#twitch) in «.env.example»,___
+
+___ㅤㅤand «render.yaml» file.___
 
 ___ㅤ4. rename ".env.example" to «.env».___
 
-___ㅤ5. deploy on render or [use local](#development).___
+___ㅤ5. add your github username___
+
+___ㅤㅤand repo name to render.yaml file___
+
+___ㅤ6. deploy on render or [use local](#development).___
 
 ㅤ[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
@@ -49,8 +55,10 @@ __- `if you have older version of nodejs, change it in «.nvmrc» file`__
 
 #
 
-### twitch:
-![image](./assets/image1.png)
+### [twitch](https://dev.twitch.tv):
+___change: (USER, ID, CHANNEL, CLIENT_ID, CLIENT_SECRET, OAUTH) in «.env.example», and «render.yaml» file___
+
+![twitch dev console](./assets/image1.png)
 
 #
 
