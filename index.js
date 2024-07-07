@@ -17,73 +17,153 @@
 
 */
 
-import colors from "colors";
-import WebSocket from "ws";
+import open, { apps } from "open";
+import express from 'express';
+import dotenv from 'dotenv';
+import axios from 'axios';
+import chalk from "chalk";
 
-const ws = new WebSocket("wss://irc-ws.chat.twitch.tv:443");
+dotenv.config();
 
-const user = "bxffz_"; // your twitch username
-const oauth = "oauth:"; // your twitch OAuth token https://twitchapps.com/tmi/
+const {
+  PORT,
+  USER,
+  ID,
+  CHANNEL,
+  CLIENT_SECRET,
+  CLIENT_ID,
+  OAUTH,
+  PRIME,
+  DELAY,
+  REDIRECT_URI,
+  AUTH_URI,
+  POST
+} = process.env;
 
-const delay = 8000; // Delay for changing color in chat (recommend min delay: 5s/5000ms)
-const customColors = []; // your custom colors
+const server = express();
+
+const customColors = []; // your custom colors, if you have Twitch Prime or Turbo
 
 const defaultColors = [
-	"#FF0000",
-	"#008000",
-	"#0000FF",
-	"#D2691E",
-	"#FF7F50",
-	"#9ACD32",
-	"#FF4500",
-	"#2E8B57",
-	"#DAA520",
-	"#5F9EA0",
-	"#1E90FF",
-	"#FF69B4",
-	"#8A2BE2",
-	"#00FF7F",
+  "blue",
+  "blue_violet",
+	"cadet_blue",
+	"chocolate",
+	"coral",
+	"dodger_blue",
+	"firebrick",
+	"golden_rod",
+	"green",
+	"hot_pink",
+	"orange_red",
+	"red",
+	"sea_green",
+	"spring_green",
+	"yellow_green",
 ]; // available colors for non-Turbo/Prime users
-const prime = false; // if you have Twitch Prime or Turbo, set to true
+
+await open(`${BASE_URI}/auth/twitch`);
+
+server.get("/", async (req, res) => {
+  res.send('Welcome to TwitchColorChanger');
+})
+
+server.get('/auth/twitch', (req, res) => {
+  const authUrl = `${AUTH_URI}/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=user:manage:chat_color`;
+  res.redirect(authUrl);
+});
+
+server.get('/auth/twitch/callback', async (req, res) => {
+  const { code } = req.query;
+
+  try {
+    const r = await axios.post(`${AUTH_URI}/token`, null, {
+      params: {
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
+        code,
+        grant_type: 'authorization_code',
+        redirect_uri: REDIRECT_URI,
+      },
+    });
+
+    const { access_token } = r.data;
+    authTwitch(access_token);
+
+    res.send('🟢🟢🟢');
+  } catch (e) {
+    console.error('🔴🔴🔴', e.message);
+    res.status(500).send('🔴🔴🔴');
+  }
+});
+
+server.get("*", async (req, res) => {
+  res.send("Error");
+})
 
 const getColor = () => {
 	if (customColors && customColors.length > 0) {
 		return customColors[Math.floor(Math.random() * customColors.length)];
-	} else if (prime) {
+	} else if (PRIME) {
 		return "#" + ((Math.random() * 0xffffff) << 0).toString(16);
 	} else {
 		return defaultColors[Math.floor(Math.random() * defaultColors.length)];
 	}
 };
 
-const TwitchColorChanger = () => {
-	const color = getColor();
-
-	if (ws.readyState === WebSocket.OPEN) {
-		ws.send(`PRIVMSG #${user} :/color ${color}`);
-		console.info(`new color: ${color}`);
-	}
+const authTwitch = async (accessToken) => {
+  try {
+    setInterval(() => TwitchColorChanger(accessToken), DELAY);
+  } catch (e) {
+    console.error('🔴🔴🔴 Error while receiving Access Token:', e.message);
+    throw e;
+  }
 };
 
-ws.on("open", () => {
-	console.info(`ws connected`.green);
+const changeColor = async (color, token) => {
+  try {
+    const r = await axios.put(
+      `${POST}?user_id=${ID}&color=${encodeURIComponent(color)}`,
+      { color },
+      {
+        headers: {
+          'Client-ID': CLIENT_ID,
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+  } catch (e) {
+      console.error('🔴🔴🔴 Error when changing color:', e.response.data);
+      throw e;
+  }
+};
 
-	ws.send(`PASS ${oauth}`);
-	ws.send(`NICK ${user}`);
-	ws.send(`JOIN #${user}`);
-});
+
+const TwitchColorChanger = async (token) => {
+  const color = getColor();
+
+  try {
+      await changeColor(color, token);
+      console.info(chalk.hex(color)(`Color changed to: ${color}`));
+  } catch (e) {
+      console.error('🔴🔴🔴 Error when changing color:', e);
+  }
+};
 
 const showSettings = () => {
-	console.log(`==================Settings==================`.red);
-	console.log("--user: ".red + `${user}`.magenta);
-	console.log("-token: ".red + `${oauth}`.magenta);
-	console.log("-delay: ".red + `${delay}`.magenta);
-	console.log("-prime: ".red + `${prime}`.magenta);
-	console.log(`==================Settings==================`.red);
+  console.log(chalk.red(`==================Settings==================`));
+  console.log(chalk.hex(`#00ffec`)("---user: " + `${USER}`));
+  console.log(chalk.hex(`#00ffec`)("-----id: " + `${ID}`));
+  console.log(chalk.hex(`#00ffec`)("-client: " + `${CLIENT_ID}`));
+  console.log(chalk.hex(`#00ffec`)("--token: " + `${OAUTH}`));
+  console.log(chalk.hex(`#00ffec`)("--delay: " + `${DELAY}`));
+  console.log(chalk.hex(`#00ffec`)("--prime: " + `${PRIME}`));
+  console.log(chalk.red(`==================Settings==================`));
 };
 
 showSettings();
 
-setInterval(() => {
-	TwitchColorChanger();
-}, delay);
+server.listen(PORT, () => {
+  console.debug(`server run on port: ${PORT}`);
+});
