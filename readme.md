@@ -1,4 +1,4 @@
-## TwitchColorChanger &mdash;
+## ![webp](./assets/1x.webp) TwitchColorChanger &mdash;
 
 ### Change color of your name on twitch using delay.
 
