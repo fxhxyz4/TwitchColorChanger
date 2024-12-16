@@ -39,6 +39,6 @@
   "devDependencies": {
     "axios": "^1.7.2",
     "chalk": "^5.3.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.7"
   }
 }
